@@ -194,9 +194,13 @@ def  login_user():
                 receive_file_path = copy_path + '\\' + file_path_name
                 # 文件名
                 file_name = file_path_name.split('\\')[-1]
-
+                file_path_index = len(receive_file_path)-len(file_name)-1
                 # 获取目录
-                file_path = receive_file_path.replace(file_name, '')
+
+                # # 此法有漏洞，当文件名与目录名相同时，他会同时将文件名还有目录名都删除
+                # # file_path = receive_file_path.replace(file_name, '')
+
+                file_path = receive_file_path[0:file_path_index]
                 # 删除文件名大小值右边的空白符，得取文件大小
                 # file_size = int((client_socket.recv(15).decode()).rstrip())
                 file_size_1, re_file_size_1 = 15, 0
@@ -223,7 +227,6 @@ def  login_user():
                     if re_file_md5_1 == 32:
                         break
                 file_md5 = file_md5.decode().rstrip()
-
                 print('文件名：%s； 文件大小：%s； md5: %s' % (file_name, file_size, file_md5))
                 # 如果file_size == -1则表示为空目录
                 if file_size == -1:
